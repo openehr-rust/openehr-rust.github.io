@@ -3,7 +3,9 @@
 **Not normative, and not a gate.** This is the archetype half of
 `tasks.md`'s "run an external corpus" item; [`json_corpus.md`](json_corpus.md)
 is the other half, canonical JSON compositions against
-`serde_json → Composition → Validate`. This file records what happened when
+`serde_json → Composition → Validate`; [`corpus-index.md`](corpus-index.md)
+answers the reverse question, from a requirement or finding id to where it
+is cited here. This file records what happened when
 archetypes nobody in this repository wrote were run through the
 `definition` reader: how many parsed, how many were refused and under which
 stated reason, and which refusals turned out to be this crate's defects
@@ -440,6 +442,67 @@ that produced it (candidate 7) now parse.
    is the reference suite's own deliberately invalid fixture — its name
    says so, and refusing it is the correct answer, the same as every other
    `validity` directory file this corpus contains.
+
+### Decisions the run asks for
+
+- **Reference Model multiplicity** (runs 2–3, restated): still open,
+  `plan.md`.
+
+## Run 7 — 2026-09-13, candidate 3 closed (`A-82`)
+
+- Corpus: unchanged, `093c77ea003742b9540e3dd377d615e2b26f2996`.
+- Crate: run 6's tree, unrelated `am::am`/AM work in between (`C_DATE`/
+  `C_TIME`/`C_DATE_TIME`/`C_DURATION`, `ArchetypeHrid`, ADL header grammar),
+  none of which touches `am::cadl::parse_definition` — run first to confirm
+  that, before doing anything else: the totals below are byte-for-byte run
+  6's, which is the expected result of a run whose purpose is a message
+  change, not a parsing change.
+
+### Totals
+
+| Extension | Files | Parsed | Refused | No `definition` | Not UTF-8 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `.adls` | 1,379 | 969 (run 6: 969) | 409 | 1 | 2 |
+| `.adl` | 593 | 33 (run 6: 33) | 560 | 0 | 2 |
+
+Candidate 3 named two refusals as "correct but unhelpful" back in run 1 and
+neither had moved since — both fixed here, message only, nothing
+reparsed: `A-82`.
+
+- `` `CIMI` is not a valid id-, at-, or ac-code `` (61 files, ADL 1.5-form
+  `use_archetype` with no id code) now reads "expected an id code before
+  the archetype reference, found none — ADL 1.5's `use_archetype` omits
+  it; this parser implements ADL 2's `use_archetype rm_type_id '['
+  ID_CODE ',' archetype_ref ']'`" — checked by cloning the lexer to look
+  ahead for the comma ADL 2's grammar requires before deciding which
+  message applies, so a genuinely malformed id code (one a comma *does*
+  follow) still gets the original, correct message.
+- `expected an attribute name, found `\*`` (38 files: 9 `.adls`, 29 `.adl`
+  — candidate 3's own run-1 text called this "expected an RM type name,
+  found `\*`", stale by the time of this run, checked directly rather than
+  trusted) now reads "ADL 1.4's `matches {*}` wildcard ("any value of this
+  RM type, no further constraint") is not implemented by this parser --
+  ADL 2's own grammar has no such alternative" — confirmed against both
+  real grammars (`openEHR/openEHR-antlr4`'s `Cadl14Parser.g4`,
+  `cComplexObjectDef: cAttribute+ | '*'`, against `Cadl2Parser.g4`,
+  `cComplexObjectDef: ( defaultValue | cAttributes defaultValue? )`, no
+  `'*'` alternative at all) before writing the message, not assumed from
+  the task's own prior wording.
+
+### Candidates — status after run 7
+
+1. `DATE_CONSTRAINT_PATTERN`: **closed, `A-75`**.
+2. `primitive_kind` case-insensitivity: **closed, `A-76`**.
+3. Refusal names that are correct but unhelpful: **closed, `A-82`**.
+4. Unwrapped interval kind: **closed, `A-72`**.
+5. Unwrapped temporal literals: **closed, `A-75`**.
+6. The `+/-` interval spelling: **open**, still unused in the corpus.
+7. A negative unwrapped integer in a tuple row: **closed, `A-77`**.
+8. A `VACMCU` cardinality violation: **closed, no code change** (run 6).
+
+Every numbered candidate this file has tracked since run 1 is now either
+closed or, for (6), stated as having no next action a corpus run can
+supply (`tasks.md`'s "close the corpus's open candidates" item).
 
 ### Decisions the run asks for
 

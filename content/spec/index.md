@@ -93,6 +93,11 @@ departs from; an undeclared departure is a defect, not a decision.
   intent.
 - [Audit](audit.md) — the findings register: every known gap between what this
   spec requires, what the documentation claims, and what the code does.
+- [Ambiguities](ambiguities.md) — where openEHR's own specification is
+  silent, contradicts itself, or disagrees with another repository claiming
+  the same authority, and the disposition this project gave each case. SEC
+  asked that these not be discarded; filing them upstream is a separate,
+  maintainer-only step this register does not itself take.
 - [Corpus](corpus.md) — what happened when archetypes nobody here wrote were
   run through the `definition` reader: dated counts per refusal, the corpus
   commit, and the candidate findings each run left. A discovery record, not
@@ -100,6 +105,14 @@ departs from; an undeclared departure is a defect, not a decision.
 - [JSON corpus](json_corpus.md) — the same discipline applied to canonical
   JSON compositions nobody here wrote, against `serde_json → Composition →
   Validate`.
+- [Corpus index](corpus-index.md) — a reverse index, generated from the two
+  files above (`scripts/generate-corpus-index.py`), from a requirement or
+  finding id to where a corpus run cites it.
+- [Specification release provenance](releases.md) — which openEHR
+  specification release each area (RM, BASE, AM, TERM, QUERY, ITS-REST) was
+  actually read against, checked directly rather than assumed: one area is
+  dated and stable, two have citations that have already drifted from the
+  release they name, and two have no citation at all.
 
 ## The rules that cost nothing to keep and cannot be repaired once broken
 
